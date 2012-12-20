@@ -1,0 +1,62 @@
+As previously mentioned, Nash equilibria are self-enforcing agreements.
+Learning studies the question of how agents reach such an agreement.
+Learning in the economics literature tries to explain behaviors observed in experiments; the authors look for simple rules human decision makers likely use.
+The ensuing debate concerning the validity of learning algorithms for human decision makers is irrelevant for the proposed research.
+
+In the learning framework, a game is played repeatedly at discrete time steps.
+Agents use strategies to choose their actions.
+At a given time step, an agent plays an action and receives a signal.
+This signal is most of the time the joint action.
+The agent then updates its strategy depending on the received signal.
+The update rule is called a learning algorithm.
+The goal is to define learning algorithms making the joint action converge to a Nash equilibrium~\cite{fudenberg_levine:1998}.
+
+A learning algorithm is composed of the three following components:
+\begin{itemize}
+\item Information accumulation
+\item Optimization of a function constructed from that information
+\item Randomization to avoid being trapped in local optima
+\end{itemize}
+Randomization commonly takes the form of smoothing; instead of playing a best response, an agent plays a mixed action favoring the best response and putting a small probability on other actions.
+A learning algorithm is called adaptive if the information is accumulated locally and the optimization is an easy computational task.
+In economics, the easiness of a computational task is defined with human decision makers in mind.
+In the proposed research, the easiness is defined for an engineered decision maker; for example, computing the eigenvectors of a medium size matrix is considered an easy computational task.
+Adaptivity is an important characteristic of learning algorithms for scaling.
+
+Fictitious play is an example of an adaptive learning algorithm.
+In fictitious play, agents keep track of the empirical frequencies of the actions played by their opponents.
+At each time step, an agent plays a best response to the mixed action induced by these empirical frequencies of play.
+Information is accumulated through the empirical frequencies.
+Optimization takes the form of playing a best response.
+Smooth fictitious play is a variant incorporating the randomization component.
+
+Unfortunately, fictitious play does not always converge to a Nash equilibrium~\cite{shapley:1963}.
+In fact, no adaptive learning rule converges to Nash equilibria for all games~\cite{hart_mas-colell:2003}.
+This result is in part due to the fact that computing a Nash equilibrium is PPAD complete~\cite{daskalakis_goldberg_papadimitriou:2006}; the complexity of finding a Nash equilibrium is exponential in the number of actions.
+
+Three approaches to designing simple convergent algorithms are presented below.
+One considers correlated equilibria with a weaker notion of convergence, another focuses on the class of weakly-acyclic games, and the last one uses the less constraining solution concept of stochastically stable states.
+
+\subsection{Correlated Equilibria}
+Hart and Mas-Colell proved that a family of adaptive learning rules converge to the set of correlated equilibria~\cite{hart_mas-colell:2000:simple,hart_mas-colell:2000:general,hart_mas-colell:2001}.
+These algorithms rely on the notion of regret.
+A regret measures the payoff difference between two actions.
+Formally, the regret for playing \(a\) instead of \(a'\) is the average increase in payoff the agent would have received, had it replaced every play of \(a\) by \(a'\).
+The optimization step seeks to minimize the regrets.
+As a result, the family of algorithms is called no regret.
+The guaranteed convergence of these algorithms comes not only from the simpler equilibrium concept but also from the use of a looser notion of convergence on a different quantity.
+Indeed, no-regret algorithms guarantee the convergence of the empirical distribution of play to the set of correlated equilibria.
+Note that the empirical distribution of play is different from the joint action and that convergence to a set is less constraining than convergence to a point.
+
+\subsection{Weakly Acyclic Games}
+A game is weakly acyclic if from any joint action there exists a better-reply path ending at some pure Nash equilibrium.
+This structure on the utility functions, introduced by Young~\cite{young:1998}, insures that better-reply learning
+algorithms converge to a Nash equilibrium in weakly acyclic games~\cite{young:2004}.
+Weakly acyclic games are an extension of potential games, a class of games used to model congestion problems and to systematically design decentralized controllers~\cite{li_marden:2011}.
+
+\subsection{Stochastically Stable States}
+Young introduced the notion of stochastically stable states to characterize the long-run behavior of a system subject to a diminishing random noise~\cite{young:1993}.
+A state is stochastically stable if it is visited infinitely often as the noise fades.
+Learning in this context is different from learning an equilibrium.
+Agents should, as a whole, make the noise fade in a way guaranteeing that the stochastically stable states of the system are the desirable ones.
+This notion of stability was used to control wind farms~\cite{marden_young_pao:2012}, to characterize the yield of self-assembly mechanisms~\cite{fox_shamma:2011:self-assembly}, and to study language evolution~\cite{fox_shamma:2011:language}.

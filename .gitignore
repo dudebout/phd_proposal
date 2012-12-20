@@ -1,0 +1,13 @@
+paper/*.pdf
+paper/*.aux*
+paper/*.out*
+paper/*.toc*
+paper/*.log
+paper/*.bbl
+paper/*.blg
+paper/*.d
+paper/*.fls
+paper/*.ist
+paper/*.acr
+paper/*.acn
+paper/*.alg

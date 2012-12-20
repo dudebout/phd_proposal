@@ -1,0 +1,444 @@
+The following presentation of the preliminary research was first developed in~\cite{dudebout_shamma:2012}.
+
+\section{Empirical-evidence Equilibria}
+\label{sec:empirical_evidence_equilibria}
+
+\subsection{Single-agent Setup}
+
+Consider a discrete-time dynamical system governed by
+\begin{equation}
+\label{eq:private_dynamic}
+x\nxt \drawn  f \of{x, a, s},
+\end{equation}
+where \(x\) is a state, \(a\) is an action, and \(s\) is a signal.
+Variables~\(x\), \(a\), and \(s\) take values in finite sets \(\cX\), \(\cA\), and \(\cS\), respectively.
+The agent picks the action \(a\).
+Nature determines the signal \(s\) according to
+\begin{subequations}
+\label{eq:nature_system}
+\begin{align}
+\label{eq:nature_dynamic}
+w\nxt &\drawn n \of{w, x, a}, \\
+\label{eq:nature_signal}
+s &\drawn \nu \of{w},
+\end{align}
+\end{subequations}
+where \(w\) is a state of Nature evolving in the finite state space~\(\cW\).
+The agent observes \(s\) but not \(w\).
+Denote by~\(\rbN\) the dynamical system described by~\cref{eq:private_dynamic,eq:nature_system}.
+
+Define the agent's observation by \(o = \tuple{x, a, s}\) and the actual realization of the system by \(r = \tuple{w, x, a, s}\).
+At time~\(t\), the agent's private history is \(p\T = \tuple{\sseqcom{o}{\tm}{0}{1}{t}}\) and the true history is \(h\T = \tuple{\sseqcom{r}{\tm}{0}{1}{t}}\).
+Denote by \(\cP\) the set of finite private histories.
+A strategy~\(\sigma : \cP \to \distribover{\cA}\) is a mapping from private histories to a distribution over the actions.
+
+At each time step, the agent receives a payoff according to the utility function \(u: \cX \times \cA \times \cS \to \bR\).
+For a given infinite private history the agent receives the sum of discounted payoffs~\(\sum\idxfromto{t}{0}{\infty} \delta^t u \of{x\T, a\T, s\T}\), where \(\delta \in \interval[oo]{0}{1}\) is a discount factor.
+The agent wants to find a strategy maximizing its expected sum of discounted payoffs \(U\params{\rbN, \sigma}\of{x\tm{0}} = \expectof[\rbN, \sigma]{\sum\idxfromto{t}{0}{\infty} \delta^t u \of{x\T, a\T, s\T}}\).
+
+When the agent knows~\cref{eq:private_dynamic,eq:nature_system}, it is facing a \ac{pomdp}.
+A natural solution concept for this type of problems is an optimal policy for the \ac{pomdp}.
+The agent computes an optimal policy making use of beliefs, which are probability distributions over the true history.
+Beliefs are obtained from the private histories~\(p\T\), the signaling structure~\cref{eq:nature_system}, and the application of Bayes's rule.
+Belief computation is intractable because every observation increases the size of the belief space.
+
+When the agent knows~\cref{eq:private_dynamic} but does not know~\cref{eq:nature_system} it can still implement an optimal policy for the \ac{pomdp}.
+However it cannot compute such an optimal policy anymore.
+In such a setting, a less constraining solution concept is required.
+Empirical-evidence optimality is one such solution concept that relies on the notion of statistical consistency.
+
+The following section presents the simplest notion of statistical consistency, depth-\(k\) consistency.
+
+\subsection{Depth-\texorpdfstring{\(k\)}{k} Consistency}
+\label{sec:depth-k_consistency}
+
+Consider \(c\), an \(\cS\)-valued ergodic process.
+For \(k\) in \(\bN\), its depth-\(k\) characteristic \(\chi\K\) is the long-run distribution of the strings of length \(k + 1\).
+For \(d\) in~\(\cS^{k + 1}\)
+\begin{equation}
+\label{eq:depth-k_characteristic}
+\chi\K\elmt{d} = \limfty{t} \probaof{\tuple{\seqqcom{c}{\tm}{t - k}{t - 1}{t}} = d}.
+\end{equation}
+Two processes with the same depth-\(k\) characteristic are called depth-\(k\) consistent.
+
+The signal observed by the agent is one such \(\cS\)-valued process.
+Consider another \(\cS\)-valued process described by
+\begin{subequations}
+\label{eq:exogenous_mockup_system}
+\begin{align}
+\label{eq:exogenous_mockup_model}
+z\nxt &= m\K \of{z, s}, \\
+\label{eq:exogenous_mockup_predictor}
+s &\drawn \mu \of{z},
+\end{align}
+\end{subequations}
+where \(z\) is a state in \(\cS\pow{k}\) and \(m\K\) is the length-\(k\)--memory function defined by
+\[
+m\K \of{\tuple{\seqqcom{s}{\tm}{t - k}{t - 2}{t - 1}}, s\T} = \tuple{\seqqcom{s}{\tm}{t - k + 1}{t - 1}{t}}.
+\]
+Under some technical assumptions, described in~\cref{sec:empirical_evidence_optimality}, the observed signal and the Markov chain described by~\cref{eq:exogenous_mockup_system} are ergodic processes.
+Furthermore, the Markov chain is depth-\(k\) consistent with the true signal when the following equality holds:
+\[
+\mu \of{z} \elmt{s} = \limfty{t}\probacond[\rbN, \sigma]{s\T = s}{\tuple{\seqqcom{s}{\tm}{t - k}{t - 2}{t - 1}} = z}.
+\]
+
+Denote by \(\rbM\K\) the dynamical system described by~\cref{eq:private_dynamic,eq:exogenous_mockup_system}.
+The system \(\rbM\K\) induces an \ac{mdp} with state~\(\tuple{x, z}\), action~\(a\), strategy~\(\sigmahat \from \cX \times \cZ \to \cA\), and the objective function~\(U\params{\rbM\K, \sigmahat}\of{x\tm{0}, z\tm{0}} = \expectof[\rbM\K, \sigmahat]{\sum\idxfromto{t}{0}{\infty} \delta^t u \of{x\T, a\T, s\T}}\).
+A strategy \(\sigmahat\) for the \ac{mdp} can be implemented in the real system by building \(z\) with~\cref{eq:exogenous_mockup_model}.
+From now on, no distinction will be made between a strategy for the \ac{mdp} \(\sigmahat\) and its associated strategy built with~\cref{eq:exogenous_mockup_model}.
+Both strategies will be denoted~\(\sigma\).
+
+Consider the following iterative process.
+The agent implements an initial strategy \(\sigma\tm{0}\).
+It formulates a depth-\(k\) consistent model \(\mu\tm{0}\) of Nature's dynamic.
+Then, it computes an optimal strategy \(\sigma\tm{1}\) for the \ac{mdp} induced by this model~\(\mu\tm{0}\).
+Upon implementation of this new strategy, the model \(\mu\tm{0}\) may lose the requisite statistical consistency.
+Therefore, the agent formulates a revised depth-\(k\) consistent model \(\mu\tm{1}\) and the process repeats.
+A fixed point of this iterative process is one way to define a solution to this problem.
+A strategy is a solution if it is optimal with respect to the model it induces.
+Note that such a strategy is not a solution to the \ac{pomdp}.
+
+Using that model to design a strategy is equivalent to the agent making an assumption about the system.
+For example, when the agent uses a depth-\(k\) consistent model, it assumes the signal is generated exogenously, \ie, not impacted by \(x\) or \(a\).
+This assumption might seem restrictive.
+However, note that the repeated-modeling and optimization phases create a feedback loop.
+Therefore, a model satisfying the consistency condition is exogenous but captures characteristics of Nature's dynamic.
+
+The following section extends beyond the notion of depth-\(k\) consistency.
+
+\subsection{Empirical-evidence Optimality}
+\label{sec:empirical_evidence_optimality}
+
+The agent assumes that a Markov chain, with state \(z\) from a finite set \(\cZ\), generates the signal \(s\) and that it can construct~\(z\) from its observations as follows:
+\begin{subequations}
+\label{eq:mockup_system}
+\begin{align}
+\label{eq:mockup_model}
+z\nxt &\drawn m \of{z, x, a, s}, \\
+\label{eq:mockup_predictor}
+s &\drawn \mu \of{z}.
+\end{align}
+\end{subequations}
+The model \(m\) represents the assumption the agent makes about the system.
+The predictor~\(\mu\) is the set of parameters the agent adjusts to be consistent with its observations.
+The pair~\(\mmu\) is called a mockup.
+
+In this setup, depth-\(k\) consistency is replaced with the following definition.
+\begin{definition}
+\label{def:consistency}
+Let \(\sigma\) be a strategy and \(\mmu\) be a mockup.
+Predictor \(\mu\) is \(\sigmam\) consistent with \(\rbN\) if
+\[
+\mu \of{z} \elmt{s} = \limfty{t}\probacond[\rbN, \sigma]{s\Tp = s}{z\T = z}.
+\]
+\end{definition}
+
+The notion of optimality used is the following.
+\begin{definition}
+Let \(\sigma\) be a strategy, \(\mmu\) be a mockup, and \(\epsilon\) be a positive number.
+Strategy \(\sigma\) is \(\mum\) optimal if it is optimal for the \ac{mdp} induced by~\(\rbM\).
+Strategy \(\sigma\) is \(\epsilonmum\)~optimal if it is \(\epsilon\) optimal for the \ac{mdp} induced by~\(\rbM\).
+\end{definition}
+
+Having defined consistency and optimality the definition of an \ac{eeo} follows.
+\begin{definition}
+Let \(\sigma\) be a strategy, \(\mmu\) be a mockup, and \(\epsilon\) be a positive number.
+The pair \(\sigmamu\) is an \(m\) \ac{eeo} if the following two conditions hold:
+\begin{enumerate}
+\item Strategy \(\sigma\) is \(\mum\) optimal.
+\item Predictor \(\mu\) is \(\sigmam\) consistent with \(\rbN\).
+\end{enumerate}
+The pair \(\sigmamu\) is an \(\epsilonm\) \ac{eeo} if the following two conditions hold:
+\begin{enumerate}
+\item Strategy \(\sigma\) is \(\epsilonmum\) optimal.
+\item Predictor \(\mu\) is \(\sigmam\) consistent with \(\rbN\).
+\end{enumerate}
+\end{definition}
+
+A little care must be taken to make \(\mu\) in~\cref{def:consistency} well defined.
+Insuring the following assumption is verified guarantees it.
+\begin{assumption}
+\label{ass:ergodicity}
+Let \(\sigma\) be a strategy, and \(T\strat{\sigma}\) be the Markov chain with state \(X = \tuple{w, x, z}\) induced by \(\rbN\) and \(\sigma\), \(X\nxt \drawn T\strat{\sigma} X\).
+The Markov chain \(T\strat{\sigma}\) is ergodic.
+\end{assumption}
+
+\Cref{ass:ergodicity} insures that \(T\strat{\sigma}\) has a unique stationary distribution \(\pi\strat{\sigma}\) such that
+\[
+\limfty{t}\probacond[\rbN, \sigma]{s\Tp = s}{z\T = z} = \probacond[\pi\strat{\sigma}]{s}{z}.
+\]
+Furthermore, \cref{ass:ergodicity} guarantees that \(\pi\strat{\sigma}\) has full support, meaning that for all \(w\) in \(\cW\), \(x\) in \(\cX\), and \(z\) in \(\cZ\), \(\pi\strat{\sigma}\elmt{w,x,z}\) is positive.
+This guarantees that \(\mu\) in~\cref{def:consistency} is well defined for all \(z\) and \(s\) as follows:
+\begin{align*}
+\mu \of{z} \elmt{s}
+&= \limfty{t}\probacond[\rbN, \sigma]{s\Tp = s}{z\T = z} \\
+&= \probacond[\pi\strat{\sigma}]{s}{z} \\
+&= \sum\idxin{w}{\cW} \probacond[\pi\strat{\sigma}]{s}{z, w} \cdot \probacond[\pi\strat{\sigma}]{w}{z} \\
+&= \sum\idxin{w}{\cW} \probacond[\pi\strat{\sigma}]{s}{w} \cdot \frac{\probaof[\pi\strat{\sigma}]{w, z}}{\probaof[\pi\strat{\sigma}]{z}} \\
+&= \sum\idxin{w}{\cW} \nu\of{w}\elmt{s} \cdot \frac{\sum\idxin{x}{\cX} \pi\strat{\sigma}\elmt{w,x,z}}{\sum\idxin{w'}{\cW}\sum\idxin{x}{\cX} \pi\strat{\sigma}\elmt{w',x,z}}
+\end{align*}
+Consistency yields a mapping associating to a strategy \(\sigma\) a unique predictor \(\sigmam\) consistent with \(\rbN\).
+Note that \(\mu\) is a continuous function of \(\pi\strat{\sigma}\).
+
+Similarly, a mapping associating to a predictor \(\mu\) a unique \(\epsilonm\)-optimal strategy can be defined.
+Denote by \(\rbM\) the dynamical system described by \cref{eq:private_dynamic,eq:mockup_system}.
+Consider the \ac{mdp} induced by \(\rbM\).
+Let \(\Uopt : \cX \times \cZ \to \bR\) be the value function for that \ac{mdp}.
+Define \(Q : \cX \times \cZ \times \cA \to \bR\) by
+\[
+Q \of{x, z, a} = \onem{\delta} u \of{x, a} + \delta \expectcond[\rbM]{\Uopt \of{x\nxt, z\nxt}}{x, z, a},
+\]
+and \(\sigma\) by
+\[
+\sigma \of{x, z} \elmt{a} = \gibbsQ.
+\]
+As \(\tau\) goes to \(0\), \(\sigma\) converges to a \(\mum\)-optimal strategy.
+When \(\tau\) is small enough, \(\sigma\) is \(\epsilonmum\) optimal.
+To guarantee uniqueness, define \(\tau\) to be the largest value such that \(\sigma\) is \(\epsilonmum\) optimal.
+Note that \(\sigma\) defined that way is a continuous function of the value function~\(\Uopt\).
+
+One way to insure that~\cref{ass:ergodicity} is verified is to have a small noise affect all the transitions.
+Formally, this means that for all \(w \in \cW\), \(x \in \cX\), \(a \in \cA\), and \(s \in \cS\), \(f \of{x, a, s}\), \(n \of{w, x, a}\), \(\nu \of{w}\), and \(\sigma \of{x, z}\) have full support.
+From now on, \cref{ass:ergodicity} is always verified.
+
+The following subsection extends the notion of \acp{eeo} to the multiagent case and defines \acp{eee}.
+
+\subsection{Multiagent Setup}
+
+Consider a collection of agents \(\cI\).
+Each agent \(i\) has a state \(x\I\), an action \(a\I\), and a signal \(s\I\).
+Let \(x\) be the tuple \(\tuple{\sseqcom{x}{\ag}{1}{2}{\abs{\cI}}}\).
+Define \(a\) and \(s\) similarly.
+Agent \(i\) is controlling the system described by
+\begin{equation}
+\label{eq:private_dynamic_i}
+x\I\nxt \drawn  f\I \of{x\I, a\I, s\I}.
+\end{equation}
+Agents \(-i\) are controlling systems described as a whole by
+\begin{equation}
+\label{eq:private_dynamic_-i}
+x\mI\nxt \drawn  f\mI \of{x\mI, a\mI, s\mI}.
+\end{equation}
+All these systems are coupled through Nature which determines the signals \(s\) according to
+\begin{subequations}
+\label{eq:nature_system_i}
+\begin{align}
+\label{eq:nature_dynamic_i}
+w\nxt &\drawn n \of{w, x, a}, \\
+\label{eq:nature_signal_i}
+s &\drawn \nu \of{w}.
+\end{align}
+\end{subequations}
+
+Denote by \(\rbN\I\) the system from agent \(i\)'s perspective.
+In the single-agent setup, \(\rbN\) was composed of a known part \cref{eq:private_dynamic} and an unknown part \cref{eq:nature_system}.
+Similarly, \(\rbN\I\) has a known part~\cref{eq:private_dynamic_i} and an unknown part~ \cref{eq:private_dynamic_-i,eq:nature_system_i}.
+
+The other definitions from previous sections can readily be extended to the multiagent case.
+Agent \(i\) has a utility function \(u\I\), a discount factor \(\delta\I\), a strategy \(\sigma\I : \cP\I \to \distribover{\cA\I}\), and a mockup of Nature and its opponents described by a state \(z\I\), a model \(m\I\), and a predictor \(\mu\I\).
+
+From agent \(i\)'s perspective, everything is identical to the single-agent setup.
+The notions of \(\mum\) optimality, \(\epsilonmum\) optimality, and \(\sigmam\) consistency can be replaced by \(\muImI\) optimality, \(\epsilonImuImI\) optimality, and \(\sigmamI\) consistency respectively.
+Therefore, the definition of \ac{eeo} readily extends to the multiagent setting.
+\begin{definition}
+Let \(\sigma\), \(\mmu\), and \(\epsilon\) such that for all \(i\) in \(\cI\), \(\sigma\I\) is a strategy, \(\mImuI\) is a mockup, and \(\epsilon\I\) is a positive number.
+The pair \(\sigmamu\) is an \(m\) \ac{eee} if the following two conditions hold for all \(i\) in \(\cI\):
+\begin{enumerate}
+\item Strategy \(\sigma\I\) is \(\muImI\) optimal.
+\item Predictor \(\mu\I\) is \(\sigmamI\) consistent with \(\rbN\).
+\end{enumerate}
+The pair \(\sigmamu\) is an \(\epsilonm\) \ac{eee} if the following two conditions hold for all \(i\) in \(\cI\):
+\begin{enumerate}
+\item Strategy \(\sigma\I\) is a \(\muImI\) optimal.
+\item Predictor \(\mu\) is \(\sigmamI\) consistent with \(\rbN\).
+\end{enumerate}
+\end{definition}
+
+For a given \(m\) and \(\epsilon\) such that for all \(i\) in \(\cI\), \(\epsilon\I\) is a positive number, denote by \(\FO\) the optimization mapping from predictors to strategies and by \(\FM\) the modeling mapping from strategies to  predictors.
+These mappings are defined by direct extension of their single agent counterparts.
+Define~\(\FF\), a mapping from the space of predictors to itself, by~\(\FF = \FM \compo \FO\).
+
+\section{Existence of Empirical-evidence Equilibria}
+
+
+Fix models \(m\) and \(\epsilon\) such that for all \(i\) in \(\cI\), \(\epsilon\I\) is a positive number.
+
+\begin{theorem}
+\label{res:mme_existence}
+There exists an \(\epsilonm\) \ac{eee}.
+\end{theorem}
+
+\begin{proof}
+First, show that \(\FF\) has a fixed point.
+The set of predictors is representable by a product of simplices.
+Therefore, \(\FF\) is a mapping from a convex and compact set to itself.
+By \cref{res:modeling_continuity,res:optimization_continuity}, \(\FO\) and \(\FM\) are continuous.
+As the composition of two continuous functions, \(\FF\) is continuous.
+By application of Brouwer's fixed-point theorem, \(\FF\) has a fixed point.
+
+\Cref{res:fixed_point_EEE} therefore implies that an \(\epsilonm\) \ac{eee} exists.
+\end{proof}
+
+\begin{proposition}
+\label{res:fixed_point_EEE}
+Let \(\mu\opt\) be a fixed point of \(\FF\).
+Define \(\sigma\opt\) by \(\sigma\opt = \FO \of{\mu\opt}\).
+The pair~\(\tuple{\mu\opt, \sigma\opt}\) is an \(\epsilonm\) \ac{eee}.
+\end{proposition}
+
+\begin{proof}
+By definition, strategy \(\sigma\opt\) is \(\epsilonImuoptImI\) optimal.
+Note that
+\[\FM \of{\sigma\opt} = \FM \compo \FO \of{\mu\opt} = \FF \of{\mu\opt} = \mu\opt.
+\]
+This implies that predictor \(\mu\opt\) is \(\sigmaoptmI\) consistent with~\(\rbN\I\).
+Therefore, \(\tuple{\mu\opt, \sigma\opt}\) is an \(\epsilonm\)~\ac{eee}.
+\end{proof}
+
+\begin{proposition}
+\label{res:optimization_continuity}
+The optimization mapping \(\FO\) is continuous.
+\end{proposition}
+
+\begin{proof}
+Agent \(i\)'s predictor only affects agent \(i\)'s strategy.
+Therefore, proving that \(\FO\) is continuous, only requires showing that \(\FO\I: \mu\I \mapsto \sigma\I\) is continuous for all \(i \in \cI\).
+Decomposing this function as follows:
+\[
+\FO\I: \mu\I \xmapsto{\subfunc{a}} U\I\opt \xmapsto{\subfunc{b}} \sigma\I,
+\]
+it is sufficient to prove that \(\subfunc{a}\) and \(\subfunc{b}\) are continuous.
+
+\cref{res:markov_continuity} shows that the value function of a finite \ac{mdp} is a continuous function of the parameters of the problem.
+Since \(\mu\I\) is one of the parameters of the \ac{mdp} whose value function is~\(U\I\opt\), \(\subfunc{a}\) is continuous.
+It was noted in~\cref{sec:empirical_evidence_optimality} that \(\subfunc{b}\) is continuous.
+\end{proof}
+
+\begin{proposition}
+\label{res:modeling_continuity}
+The modeling mapping \(\FM\) is continuous.
+\end{proposition}
+
+\begin{proof}
+Agent \(i\)'s strategy impacts all the agents' predictors.
+Proving the continuity of \(\FM\), requires showing that \(\FM\ag{i, j}: \sigma\I \mapsto \mu\ag{j}\) is continuous for all \(i, j \in \cI\).
+Decomposing this function as follows:
+\[\FM\ag{i, j}: \sigma\I \xmapsto{\subfunc{c}} T\strat{\sigma} \xmapsto{\subfunc{d}} \pi\strat{\sigma} \xmapsto{\subfunc{e}} \mu\ag{j},
+\]
+it is sufficient to prove that \(\subfunc{c}\), \(\subfunc{d}\), and \(\subfunc{e}\) are continuous.
+
+Since \(\subfunc{c}\) is linear, it is continuous.
+\cite[Theorem~4.1]{meyer:1980} shows that the stationary distribution of a finite ergodic Markov chain is a continuous function of the elements of its transition matrix, which proves that \(\subfunc{d}\) is continuous.
+It was noted in~\cref{sec:empirical_evidence_optimality} that \(\subfunc{e}\) is continuous.
+\end{proof}
+
+\begin{lemma}
+\label{res:markov_continuity}
+Consider a finite \ac{mdp} described by a dynamic~\(x\nxt \drawn f \of{x, a}\), a utility function~\(u \of{x, a}\), and a discount factor~\(\delta\).
+Denote by \(\theta\) the finite vector of all the entries in \(f\) and~\(u\).
+Let~\(\Btheta\) be the Bellman operator associated with the problem.
+By definition, the value function of the problem \(\Utheta\) is the fixed point of \(\Btheta\), \(\Utheta = \Btheta \Utheta\).
+
+The function \(\theta \mapsto \Utheta\) is continuous.
+\end{lemma}
+
+\begin{proof}
+Let \(\theta\) and \(\theta'\) be two vectors of parameters.
+The value function \(\Utheta\) is a fixed point of~\(\Btheta\). The Bellman operator~\(\Btheta\) is a contraction mapping with Lipschitz constant \(\delta\). As a result,
+\begin{align*}
+\norm{\Utheta - \Uthetap} &= \norm{\Btheta \Utheta - \Uthetap} \\
+&\le \norm{\Btheta \Utheta - \Btheta \Uthetap} + \norm{\Btheta\Uthetap - \Uthetap} \\
+&\le \delta \norm{\Utheta - \Uthetap} + \norm{\Btheta\Uthetap - \Uthetap} \\
+&\le \frac{1}{\onem{\delta}} \norm{\Btheta\Uthetap - \Uthetap}.
+\end{align*}
+
+The continuity of \(\theta \mapsto \Btheta \Uthetap\) can now be established.
+By definition, \(\parentheses{\Btheta \Uthetap} \of{x} = \max\idxin{a}{\cA} v \of{x, a, \theta}\), where \(v \of{x, a, \theta} = \onem{\delta} u \of{x, a} + \delta \tr{f \of{x, a}} \Uthetap\).
+For fixed~\(x\) and~\(a\), \(\theta \mapsto v \of{x, a, \theta}\) is linear and therefore continuous.
+For a fixed~\(x\), \(\theta \mapsto \Btheta \Uthetap \of{x}\) is the maximum of a finite number of continuous functions and as such is continuous.
+The function \(\theta \mapsto \Btheta \Uthetap\) is continuous because each of its finitely many components is continuous.
+
+Continuity of \(\theta \mapsto \Btheta \Uthetap\) implies that \(\norm{\Utheta - \Uthetap}\) goes to zero as \(\theta\) goes to \(\theta'\).
+This last statement concludes the proof.
+\end{proof}
+
+\section{Learning Empirical-evidence Equilibria}
+\label{sec:learning_empirical_evidence_equilibria}
+
+\subsection{A Learning Rule}
+
+The fixed points of \(\FF\) are \(\epsilonm\) \acp{eee}.
+A natural approach to try and learn an \(\epsilonm\) \ac{eee} is to use an adaptive rule that converges to fixed points.
+Consider the following adaptive rule:
+\begin{equation}
+\label{eq:update_rule}
+\mu\Tp = \mu\T + \alpha\T \parentheses*{\FF \of{\mu\T} - \mu\T},
+\end{equation}
+where \(\alpha\T\) is a step size.
+The long-run behavior of \cref{eq:update_rule} is related to properties of the following differential equation:
+\begin{equation*}
+\label{eq:differential_equation}
+\dot{\mu} = \FF \of{\mu} - \mu.
+\end{equation*}
+In particular, Benaïm showed that the limit set of \cref{eq:update_rule} is a connected set internally chain-recurrent for the flow induced by \(\FF - \text{Id}\), where \(\text{Id}\) is the identity function~\cite{benaim:1996}.
+The fixed points of \(\FF\) are connected sets internally chain-recurrent for the flow induced by~\(\FF - \text{Id}\) but they might not be the only ones.
+Therefore, if \cref{eq:update_rule} converges it might yield an \(\epsilonm\)~\ac{eee}.
+
+\subsection{Simulation Results}
+This learning rule was successfully used on a simplified market example.
+Two agents can hold a quantity of a single asset between \(0\) and \(4\), \(\cX = \set{0,1,2,3,4}\).
+At each time step, each agent can sell one asset, buy one asset, or hold its position, \(\cA = \set{\text{Sell}, \text{Hold}, \text{Buy}}\).
+The assets can be traded at a low price or at a high price, \(\cS=\set{\text{Low}, \text{High}}\).
+Nature exogenously determines the market trend as a bull market or a bear market, \(\cW=\cS \times \set{\text{Bear}, \text{Bull}}\).
+The price is impacted by the past price, the market trend, and the orders placed by the two agents.
+A high price in the past, buying orders, or a bull market increase the chances of seeing a high price in the future.
+The agents receive the price at each time step but are not aware of the price dynamic.
+In this model, they are not even aware of the existence of the market trend.
+The two agents use a discount factor~\(\delta=0.95\).
+
+Agent~1 starts with the idea that the price will be high with probability 1.
+Agent~2 starts with the idea that the price will be low with probability 1.
+Each agent is trying to learn a depth-\(0\) model of the price.
+Two versions of~\cref{eq:update_rule} were simulated.
+The first one used~\cref{eq:update_rule} directly with a fixed step size of~\(0.1\).
+The stationary distribution \(\pi\strat{\sigma}\) was computed at each time step to obtain the true value of~\(\FF \of{\mu\T}\),
+The results of the simulations using the theoretical predictor are presented in~\cref{fig:simulation_theoretical}.
+Since the price is a public signal, after a transient phase due to the step size, the predictions of both agents agree.
+The prediction converges to probability of seeing a high price of \(0.431\).
+The two agents use the same strategy that is the optimal response for that prediction of the price.
+When the price is high sell.
+When the price is low, sell when having four units, hold when having three units, and buy otherwise.
+The learning rule has indeed converged to an \ac{eee}.
+
+\newcommand{\figureswidth}{320pt}
+\newcommand{\figuresheight}{170pt}
+
+\begin{figure}[!ht]
+  \centering
+  \newcommand{\ylabelsymbol}{\(\mu\T\I\elmt{\mathrm{High}}\)}%
+  \newcommand{\tabledata}{simulation_theoretical.dat}%
+  \begin{tikzpicture}
+    \input{simulation.tikz}
+  \end{tikzpicture}
+  \caption{Simulation results of two agents learning a depth-0 model of the price for the market example with the theoretical predictor.}
+  \label{fig:simulation_theoretical}
+\end{figure}
+
+\newpage
+In the second simulated version of~\cref{eq:update_rule}, the stationary distribution was only estimated by playing~\(100\) rounds of the game at each time step.
+Because of the variance induced by this sampling process, the step size was taken to be diminishing, \(\alpha\T = \parentheses*{\frac{1}{t}}\pow{\frac{3}{4}}\).
+The estimated predictors obtained in that case are denoted by \(\hat{\mu}\I\T\).
+The results of the simulation using the empirical predictors are presented in~\cref{fig:simulation_empirical}.
+Estimating, instead of using the true probability, induces some variations.
+The learning rule does not converge, but oscillates around the \ac{eee} reached by the theoretical predictor.
+
+\begin{figure}[!ht]
+  \centering
+  \newcommand{\ylabelsymbol}{\(\hat{\mu}\T\I\elmt{\mathrm{High}}\)}%
+  \newcommand{\tabledata}{simulation_empirical.dat}%
+  \begin{tikzpicture}
+    \input{simulation.tikz}
+  \end{tikzpicture}
+  \caption{Simulation results of two agents learning a depth-0 model of the price for the market example with an empirical predictor.}
+  \label{fig:simulation_empirical}
+\end{figure}

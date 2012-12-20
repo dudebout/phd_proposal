@@ -1,0 +1,109 @@
+\subsection{Formulation}
+Decision making is the rational process of finding the best action given the information available.
+An agent is given a set of actions \(\cA\) and preferences over these actions.
+Preferences are expressed by a utility function \(u \from \cA \to \bR\), such that for two actions \(a\) and \(a'\) in \(\cA\), the following two properties hold:
+\begin{itemize}
+\item The agent prefers \(a\) over \(a'\) if and only if \(u \of {a} > u \of {a'}\).
+\item The agent is indifferent between \(a\) and \(a'\) if and only if \(u \of {a} = u \of {a'}\).
+\end{itemize}
+The utility of an action can be interpreted as a payoff that the agent wants to maximize.
+The agent can make nondeterministic decisions.
+Instead of committing to a specific action, it can choose a mixed action.
+A mixed action \(\alpha\) is a distribution over the action set.
+A mixed action's payoff is the expected value of the payoffs of the actions in its support.
+For example, choosing \(a\) with probability \(\frac{1}{3}\) and \(a'\) with probability \(\frac{2}{3}\) yields a payoff \(\frac{1}{3} u \of {a} + \frac{2}{3} u \of {a'}\).
+The domain of the utility function is usually extended from the action set \(\cA\) to distributions over the action set \(\distribover {\cA}\).
+For an element \(\alpha \) in \( \distribover {\cA}\), \(u \of {\alpha} = \expectof[a \drawn \alpha]{u \of {a}}\).
+Solving a decision-making problem is equivalent to solving a stochastic optimization problem.
+
+\begin{note}[Von Neumann--Morgenstern utility theorem]
+The representation of preferences by utility functions was characterized by von Neumann and Morgenstern~\cite{neumann_morgenstern:1944:2nd}.
+They proved that rational preferences can always be represented by a utility function to be maximized in expectation and that the utility function is unique up to a positive affine transformation.
+Preferences are rational if they satisfy four axioms: completeness, transitivity, continuity, and independence.
+Human decision makers might not verify these axioms, but engineered agents can always be designed to verify them.
+Insuring the validity of these axioms is therefore not a concern for this research.
+\end{note}
+
+\subsection{Dynamic Problems}
+Problems in controls are dynamic.
+The simplest dynamic problems are \acp{mdp}.
+In an \ac{mdp}, a state evolves in discrete time controlled by an action.
+The state at time \(t+1\) is a random variable depending only on the state of the system at time \(t\) and the action played at time \(t\).
+This dynamic is captured by the short notation
+\begin{equation}
+\label{eq:mdp_dynamic}
+x\nxt \drawn f \of {x, a},
+\end{equation}
+where \(x\) and \(x\nxt\) are states in a finite state space \(\cX\) and \(a\) is an action in a finite action set~\(\cA\).
+At each time step, the agent observes the state and chooses an action.
+A history is a sequence of states and actions.
+The history up to time \(t\) is \(h\T = \tuple{\sseqcom{x}{\tm}{0}{1}{t}, \sseqcom{a}{\tm}{0}{1}{t}} \).
+In state \(x\), choosing action \(a\) yields a payoff \(u \of {x, a}\).
+The agent is interested in maximizing its expected sum of discounted payoffs.
+For a given infinite history \(h\T\), the agent receives a sum of discounted payoffs \(\sum \idxfromto{t}{0}{\infty} \delta \pow {t} u \of {x\T, a\T}\), where \(\delta \in \interval[co]{0}{1}\) is the discount factor.
+Note that \(\delta \pow {t}\) denotes \(\delta\) to the power \(t\) whereas \(x\T\) and \(a\T\) denote the state and the action at time \(t\).
+
+In a static decision-making problem, the agent has to choose one action.
+In an \ac{mdp}, the agent has to choose a strategy which is a plan of action for all the possible outcomes of the process.
+A strategy \(\sigma\) determines an action \(a\T\) depending on \(\tuple{h\Tm, x\T}\), the information available at time \(t\).
+The domain of a strategy is infinite; therefore, the set of strategies \(\Sigma\) is infinite.
+An agent using strategy \(\sigma\) with initial state \(x\) receives an expected sum of discounted payoffs
+\begin{equation}
+\label{eq:mdp_optimal_strategy}
+U\strat{\sigma} \of {x} = \expectcond[\sigma] {\sum \idxfromto{t}{0}{\infty} \delta \pow {t} u \of {x\T, a\T}} {x\tm{0} = x}.
+\end{equation}
+
+A solution to the \ac{mdp} is an element of \(\inter \idxin {x} {\cX} \argmax \idxin {\sigma} {\Sigma} U \strat{\sigma} \of {x}\).
+It is not obvious that the maximum is attainable or that the intersection is not empty.
+Furthermore, since \(\Sigma\) is infinite, looking for a solution with an exhaustive-search method is in vain.
+However, by using the Markovian structure of the problem these issues can be bypassed.
+The main theorem in the \ac{mdp} literature states that for any finite \ac{mdp}, there exists a stationary deterministic optimal strategy~\cite{puterman:1994,bertsekas:1995}.
+A strategy is stationary if the next action is computed using only the current state; the history leading to the current state and the time are not used.
+A strategy is deterministic if the actions selected are not mixed.
+
+This result reduces the set of strategies to be considered to a finite number.
+However, solving~\cref{eq:mdp_optimal_strategy} for each of the \(\abs{\cA} \pow {\abs{\cX}}\) strategies is prohibitively expensive.
+The structure of the problem can be used to explore the solution space more efficiently.
+
+A central concept in the analysis of \acp{mdp} is the value function \(U\opt \from \cX \to \bR\) of the problem.
+The utility received by using an optimal strategy from the initial state \(x\) is \(U\opt \of {x}\).
+The value function is characterized by the Bellman equation
+\begin{equation}
+\label{eq:bellman_equation}
+U\opt \of {x} = \max \idxin{a}{\cA} \grpbrace{u \of {x, a} + \delta \expectcond {U\opt \of{x\nxt}} {x, a}}.
+\end{equation}
+Dynamic-programming algorithms search the solution space by using the recursive structure of the Bellman equation.
+These algorithms are more efficient than exhaustive-search algorithms but are under the curse of dimensionality; the amount of computations required grows exponentially with the size of the state space.
+The two main dynamic-programming algorithms are value iteration and policy iteration.
+
+\subsection{Learning a Strategy}
+When the dynamic of the system is not known but can be easily simulated, reinforcement-learning algorithms can be used~\cite{bertsekas_tsitsiklis:1996, sutton_barto:1998}.
+A reinforcement-learning algorithm learns the transition probabilities while using its current optimal strategy.
+As the algorithm accumulates information, it computes better strategies.
+Reinforcement-learning algorithms work by balancing exploration and exploitation.
+Exploration refers to learning the transition probabilities, and exploitation refers to using a strategy maximizing the expected sum of discounted payoffs.
+Dynamic programming is an offline approach, whereas reinforcement learning is an online approach.
+
+Dynamic-programming algorithms compute the value function \(U\opt \from \cX \to \bR\).
+Reinforcement-learning algorithms compute the action value function \(Q \from \cX \times \cA \to \bR\) defined by
+\begin{equation}
+\label{eq:q-value_definition}
+Q \of {x, a} = u \of {x, a} + \delta \expectcond {U\opt \of{x\nxt}} {x, a}.
+\end{equation}
+SARSA and \(Q\)-learning are reinforcement-learning versions of policy iteration and value iteration respectively.
+
+\subsection{Imperfect-information Problems}
+\acp{pomdp} model situations where the agent is uncertain about the state of the dynamical system.
+In a \ac{pomdp}, the state evolves according to~\cref{eq:mdp_dynamic}.
+However, at each time step, the agent cannot observe the state and can only observe a signal
+\begin{equation}
+\label{eq:pomdp_observation}
+y \drawn g \of {x}.
+\end{equation}
+This small change in the information available to the agent has big consequences: \acp{pomdp} are intractable.
+
+In an \ac{mdp}, the state is the only necessary information needed to compute the next action of an optimal strategy.
+In a \ac{pomdp}, the agent does not know the state and needs to use beliefs to implement an optimal strategy.
+Beliefs are probability distributions over sequences of states computed using the signals observed and Bayes' inference.
+An optimal solution for a \ac{pomdp} is a function from the belief space \(\Union\idxfromto{t}{0}{\infty}\distribover{\cX\pow{t}}\) to the action set.
+The fact that the belief space is continuous is what makes the problem intractable.

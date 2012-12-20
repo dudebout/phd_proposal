@@ -1,0 +1,39 @@
+A complex system is a set of agents connected through a network.
+The subsystems of a car, a robotic plant, and the power grid are examples of complex systems at different scales.
+The advances in information technology made these complex systems ubiquitous, and tools to control them are needed.
+These systems can be controlled in a centralized fashion.
+However, a centralized controller represents a single point of failure, does not scale to large networks, and incurs high communication costs.
+Adaptive decentralized controllers address these problems.
+A controller is decentralized if each agent in the system makes some decisions.
+Decentralization renders the system more robust by not having a single point of failure.
+A controller is adaptive if each agent is doing simple computations using local information.
+Adaptivity mitigates the scalability and communication issues.
+
+In optimal control, centralized controllers are the optima of a function.
+Unfortunately, in the multiagent setting, the notion of optimality is ill defined.
+Game theory, the study of interacting decision makers, addresses this issue by replacing optima with equilibria.
+An equilibrium is a joint decision satisfying all the agents at once; at equilibrium, no agent has an incentive to unilaterally deviate.
+In a game-theoretic approach, decentralized controllers are equilibria of a game.
+
+Equilibria can be computed by a centralized algorithm.
+However, this centralized approach brings back the issue of scalability and prevents the addition of new agents without designing a new controller.
+Game-theoretic learning enables the decentralized computation of equilibria.
+Each agent modifies its strategy according to a learning rule using local information.
+The learning rules used by the agents are chosen to guarantee convergence to an equilibrium.
+Game-theoretic learning is an adaptive decentralized approach to designing adaptive decentralized controllers.
+
+Engineering problems often involve dynamical systems with a state, such as \acp{mdp}.
+When the decision maker cannot observe the state directly it is facing a \ac{pomdp}.
+Solving an \ac{mdp} is tractable for reasonable sizes of the state space, whereas solving a \ac{pomdp} is intractable.
+Stochastic games extend these processes to the multiagent case.
+In a complex system, agents only observe local information.
+Therefore, the games used to control these systems are stochastic games of imperfect information.
+These games are, like \acp{pomdp}, intractable.
+To this day, there exists no centralized algorithm nor learning rule for computing equilibria in stochastic games.
+
+The full-rationality requirement of game theory is in part to blame for this lack of results.
+Full rationality requires agents to have perfect understanding of the game being played.
+This requirement is not realistic for engineered agents which have, by nature, bounded rationality.
+The proposed research uses bounded rationality to make each agent face an \ac{mdp} instead of a \ac{pomdp}.
+
+The rest of this chapter introduces the formal setting of learning in stochastic games along with relevant previous work.

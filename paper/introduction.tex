@@ -1,0 +1,25 @@
+The objective of the proposed research is to develop the framework of \acp{eee} in stochastic games and to design decentralized controllers using learning in that framework.
+The goal is to enable a set of agents to control a dynamical system in a decentralized fashion.
+To do so, the agents play a stochastic game crafted such that its equilibria are decentralized controllers for the dynamical system.
+Unfortunately, there exists no algorithm to compute equilibria in stochastic games.
+One explanation for this lack of results is the full-rationality requirement of game theory.
+In the case of stochastic games, full rationality imposes that two requirements be met at equilibrium.
+First, each agent has a perfect model of the game and of its opponents' strategies.
+Second, each agent plays an optimal strategy for the \ac{pomdp} induced by its opponents' strategies.
+Both requirements are unrealistic.
+An agent cannot know the strategies of its opponents; it can only observe the combined effect of its own strategy interacting with its opponents'.
+Furthermore, \acp{pomdp} are intractable; an agent cannot compute an optimal strategy in a reasonable time.
+In addition to these two requirements, engineered agents cannot carry perfect analytical reasoning and have limited memory; they naturally exhibit bounded rationality.
+In the proposed research, bounded rationality is not seen as a limitation and is instead used to relax the two requirements.
+In the \ac{eee} framework, agents formulate low-order empirical models of observed quantities called mockups.
+Mockups have unmodeled states and dynamic effects, but they are statistically consistent; the empirical evidence observed by an agent does not contradict its mockup.
+Each agent uses its mockup to derive an optimal strategy.
+Since agents are interconnected through the system, these mockups are sensitive to the specific strategies employed by other agents.
+In an \ac{eee}, the two requirements are weakened.
+First, each agent has a consistent mockup of the game and the strategies of its opponents.
+Second, each agent plays an optimal strategy for the \ac{mdp} induced by its mockups.
+The \ac{eee} framework provides a new solution concept for stochastic games.
+This solution concept has been contrasted to other classical notions.
+General conditions for the existence of \acp{eee} have been derived.
+The properties of \acp{eee} will be investigated.
+The \ac{eee} framework will be used to solve decentralized control problems through the design of an algorithm converging to \acp{eee}.

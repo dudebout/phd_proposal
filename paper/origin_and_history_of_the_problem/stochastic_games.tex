@@ -1,0 +1,102 @@
+Stochastic games are the extension of \acp{mdp} to the multiagent setting.
+The utility functions of the agents depend on a state whose dynamic is impacted by the joint actions.
+In other terms, for each state, the agents play a different game.
+Their actions impact the payoffs and the transition probabilities between states.
+In a stochastic game, the agents want to maximize the expected sum of their discounted payoffs.
+Repeated games are a subset of stochastic games with no state; the same stage game is played at each time step~\cite{mailath_samuelson:2006}.
+Note that repeated play of a game, for example as used in learning, differs from a repeated game; in the repeated play of a game, the quantity to maximize is not the sum of discounted payoffs.
+Requiring adaptive agents implies that they use local, thus imperfect information.
+For fixed strategies of its opponents, an agent is facing a \ac{pomdp}.
+Therefore, there are no results to compute equilibrium strategies nor learning algorithms for the stochastic games of imperfect information.
+
+In a stochastic game, a state evolves in discrete time controlled by the joint action of a set of agents \(\cI\).
+The state at time \(t+1\) is a random variable depending only on the state of the system at time \(t\) and the joint action played at time \(t\).
+This dynamic is captured by the short notation
+\begin{equation}
+\label{eq:stochastic_game_dynamic}
+x\nxt \drawn f \of {x, a},
+\end{equation}
+where \(x\) and \(x\nxt\) are states in a finite state space \(\cX\) and \(a = \tuple{\seqcom{a}{\ag}{1}{\card{\cI}}}\) is a joint action in the finite joint action set \(\cA = \prod\idxin{i}{\cI} \cA\I\).
+When the game is of imperfect information, at each time step, agent~\(i\) observes a signal \(y\I \drawn g\I \of {x}\).
+The private history of agent~\(i\) up to time \(t\) is \(h\I\T = \tuple{\sseqcom{y\I}{\tm}{0}{1}{t}, \sseqcom{a\I}{\tm}{0}{1}{t}} \).
+A strategy for agent~\(i\) is a mapping from its private histories to the distribution over its actions, \(\sigma\I \from \cH\I \to \distribover{\cA\I}\).
+In state \(x\), joint action \(a\) yields a payoff \(u\I \of {x, a}\) to agent~\(i\).
+Each agent is interested in maximizing its expected sum of discounted payoffs.
+
+Extensions of reinforcement learning to the multiagent setting and three equilibrium concepts lowering the requirements on the beliefs are presented below.
+
+\subsection{Multiagent Reinforcement Learning}
+Hu and Wellman attempted to apply results from reinforcement learning to the multiagent setting with the Nash--\(Q\)-learning algorithm~\cite{hu_wellman:2003}.
+In stochastic games, it is unfortunately not enough to balance exploration and exploitation.
+The Nash--\(Q\)-learning algorithm requires the agents to keep track of action-value functions for their opponents and to play Nash-equilibrium strategies.
+This approach is computationally expensive and only yields results for agents with identical or opposite utility functions.
+
+\subsection{Subjective and Self-confirming Equilibria}
+Subjective equilibria, introduced by Kalai and Lehrer, lower the requirements on the beliefs~\cite{kalai_lehrer:1993:subjective}.
+They only require the beliefs to be correct on the path of play.
+Self-confirming equilibria, introduced by Fudenberg and Levine, are a closely related concept~\cite{fudenberg_levine:1993}.
+In a self-confirming equilibrium an agent can hold the false belief that its opponents correlate their actions off the path of play.
+Agents playing a subjective or self-confirming equilibrium never see plays contradicting their beliefs.
+
+\newcommand{\belief}{^}
+Subjective and self-confirming equilibria are formally defined in terms of belief strategies.
+Belief strategy \(\tilde{\sigma}\belief{i}\ag{j} \from \cH\ag{j} \to \distribover{\cA\ag{j}}\) is the strategy agent~\(i\) believes agent~\(j\) is playing.
+Agent~\(i\)'s belief is composed of one belief strategy for each agent \(\tilde{\sigma}\belief{i} = \tuple{\seqcom{\tilde{\sigma}\belief{i}}{_}{1}{\card{\cI}}}\).
+In particular, its belief strategy for itself is its actual strategy, \(\tilde{\sigma}\belief{i}\I = \sigma\I\).
+
+A set of \(\card{\cI}\) strategies, one per agent, induces a distribution over the possible histories.
+The histories having a positive probability of being visited are called the path of play.
+This set of strategies can be the actual strategies or the beliefs of one agent.
+Note that a distribution over beliefs also induces a distribution over the possible histories.
+
+Strategies \(\sigma\) and beliefs \(\tilde{\sigma}\) form a subjective equilibrium when the following two conditions hold for each agent \(i\):
+\begin{itemize}
+\item Strategy \(\sigma\I\) is a best response to the belief strategies~\(\tilde{\sigma}\belief{i}\mI\).
+\item Strategies \(\sigma\) and strategies \(\tilde{\sigma}\belief{i}\) induce the same distribution over the path of play.
+\end{itemize}
+
+Strategies \(\sigma\) and distributions over beliefs \(\tilde{\nu}\) form a self-confirming equilibrium when the following two conditions hold for each agent \(i\):
+\begin{itemize}
+\item Strategy \(\sigma\I\) is a best response to the distribution over belief strategies~\(\tilde{\nu}\belief{i}\mI\).
+\item Strategies \(\sigma\) and the distribution over belief \(\tilde{\nu}\belief{i}\) induce the same distribution over the path of play.
+\end{itemize}
+
+These two equilibrium concepts loosens the requirements of full rationality.
+Agents can be mistaken about events that will never happen.
+However, these concepts require each agent to be aware of the existence of every other agent.
+An agent needs to understand what its opponents actions and signals are to build belief strategies.
+It also needs to know the exact impact of its opponents actions to verify the optimality of its own strategy.
+Therefore, these two equilibrium concepts are only a first step towards the goal of the proposed research.
+
+\subsection{Weakly Belief-free Equilibria}
+In repeated games, the notion of Nash equilibrium is not satisfactory.
+Some Nash equilibria exhibit noncredible threats; some strategies are best response to each other on the path of play but not off of it.
+Strategies using only credible threats are called sequentially rational or subgame perfect.
+Payoff folk theorems establish that the set of payoffs achievable at equilibrium with sequentially rational strategies is the set of feasible individually strictly rational payoffs.
+These theorems rely on the recursive structure of optimal solutions.
+Sugaya recently derived the proof of this result for games of private imperfect information~\cite{sugaya:2011}.
+The previous best result for that class of games was established by Kandori~\cite{kandori:2011}.
+He characterized weakly belief-free equilibria, a subset of the sequentially rational equilibria exhibiting a recursive structure.
+In a weakly belief-free equilibrium, agents only need to have correct beliefs about the last action played by their opponents.
+
+\subsection{Analogy-based Expectation Equilibria}
+Jehiel introduced the concept of \acp{abee} for games of perfect information to keep the belief space size constant~\cite{jehiel:2005}.
+\acp{abee} can be expressed in terms of belief strategies
+Each agent partitions the history set in a finite number of analogy classes.
+An analogy class for agent~\(i\) is denoted by \(\kappa\I\) and the set of analogy classes by \(\cK\I\).
+Each agent~\(i\) believes that its opponents' actions are fully determined by the analogy class; for two histories \(h\) and \(h'\) in the same analogy class \(\kappa\I\) and for all agent~\(j\), \(\tilde{\sigma}\belief{i}\ag{j} \of{h} = \tilde{\sigma}\belief{i}\ag{j} \of{h'} = \alpha\belief{i,\kappa\I}\ag{j}\).
+The, potentially mixed, action~\(\alpha\belief{i, \kappa\I}\ag{j}\) is called an analogy-based belief.
+
+Strategies \(\sigma\), analogy classes \(\cK\), and analogy-based beliefs \(\alpha\) form an \ac{abee} when the following two conditions hold for each agent \(i\):
+\begin{itemize}
+\item Strategy \(\sigma\I\) is a sequentially rational best response to the analogy-based beliefs~\(\alpha\belief{i}\mI\).
+\item For all agent~\(j\), the analogy-based belief \(\alpha\belief{i}\ag{j}\) is consistent with \(\sigma\ag{j}\), \ie, for all \(\kappa\I\) in \(\cK\I\) and \(a\ag{j}\) in \(\cA\ag{j}\), \(\alpha\belief{i, \kappa\I}\ag{j}\elmt{a\ag{j}} = \probacond{\sigma\ag{j} \of{h} = a\ag{j}}{h \in \kappa\I}\).
+\end{itemize}
+
+The \ac{abee} concept is a substantial step in the direction of the proposed research.
+The perfect understanding required by full rationality is replaced by the notion of consistency.
+Beliefs are consistent if they are accurate on average even though they might be inexact upon closer inspection.
+This relaxation simplifies the problem that each agent is facing.
+However, each agent is still required to have a good understanding about the game being played and the role of its opponents.
+The proposed research goes beyond this limitation by using consistency in a setup where agents do not need to know they are playing a game.
+The following section exposes other approaches using consistency.

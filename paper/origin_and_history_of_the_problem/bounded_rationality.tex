@@ -1,0 +1,49 @@
+In classical game theory, agents are assumed to be fully rational.
+Bounded rationality studies scenarii where agents have limited computation power or make mistakes~\cite{rubinstein:1998}.
+In the economics literature, bounded rationality is used to take into account human nature and to explain discrepancies with experiments.
+Fully rational agents can perfectly use any knowledge they have about the problem they face.
+For example, in a stochastic game of imperfect information, fully rational agents propagate beliefs accurately.
+Propagating beliefs means doing Bayesian inference on a belief space whose size increases with time.
+Engineered agents have limited computation power, limited memory, and bounded precision.
+Furthermore, adaptivity requires the use of local and therefore incomplete information.
+As a result, there is no hope to build fully rational adaptive agents in a dynamic world.
+In the proposed research, the bounded rationality of engineered agents is used as an advantage.
+Instead of relying on propagation of beliefs regarding the imperfect information, simple consistent models are used.
+A model is consistent if the agent does not observe evidence contradicting it.
+
+Four approaches using bounded rationality to lower the complexity of the problem are presented below.
+The first one uses Kalman filtering to update a model while the others use the notion of consistency.
+All the consistency approaches use exogenous models, whereas the proposed research lifts that restriction.
+Other differences with the proposed research are highlighted.
+
+\subsection{Linear Modeling}
+Chang, Ho and Kaelbling used modeling to simplify multiagent learning~\cite{chang_ho_kaelbling:2004}.
+Each agent assumes that the signal received is generated from a linear system and uses Kalman filtering to get the best estimate of the current state.
+
+\subsection{Mean-field Games}
+Lasry and Lions studied a setting where a very large number of agents faces identical copies of an \ac{mdp}~\cite{lasry_lions:2007}.
+The \acp{mdp} are coupled through a common signal received by the agents.
+This signal is the proportion of agents in each state; it is a stochastic process impacted by the strategies of all the agents.
+Agents compute their optimal strategies by considering a consistent, exogenous and stationary model of the signal.
+Agents are in a \ac{mfe} if their optimal strategies induce precisely this stationary signal.
+The goal of \acp{mfe} is to simplify the analysis of games with a very large number of agents.
+The main result in the \ac{mfe} literature is that when the number of agents goes to infinity, \acp{mfe} coincide with Nash equilibria.
+The fact that the signal is not truly stationary nor exogenous washes away when the number of agents is large.
+\acp{mfe} aim at simplifying the analysis of Nash equilibria for a specific game with a large number of players.
+The proposed research aims for a different equilibrium concept in general games with any number of players.
+Furthermore, \acp{mfe} focuses on stationary models, whereas the proposed research considers more elaborate models.
+Weintraub, Benkard, and van Roy applied the mean-field methodology to approximate subgame-perfect equilibria in a problem of dynamic imperfect competition~\cite{weintraub_benkard_van-roy:2008}.
+They named their equilibrium concept oblivious equilibrium.
+
+\subsection{Incomplete Theories}
+Eyster and Piccione analyzed a scenario in which traders have exogenous nonstationary consistent models of prices on the stock market; these models are called incomplete theories~\cite{eyster_piccione:2011}.
+The traders use their theories to acquire assets.
+The key result is that traders with more complete theories do not necessarily perform better.
+The main difference with the proposed research is that, the actions of the traders do not influence prices.
+Therefore, prices are truly exogenous; traders do not need to update their models.
+
+\subsection{Egocentric Modeling}
+Seah and Shamma analyzed a specific game where two agents share a one-dimensional signal~\cite{seah_shamma:2008}.
+The signal is stochastic and influenced by the strategies of the agents.
+However, the agents model it with a consistent stationary exogenous model.
+Similarly, in the proposed research, an inaccurate  simplified model is used to lower the complexity of computations.

@@ -1,0 +1,143 @@
+\subsection{Games and Equilibria}
+In a game setting, a set of agents \(\cI\) faces decision-making problems.
+Each agent \(i\) in \(\cI\) has an action set \(\cA\I\) and a utility function \(u\I \from \cA \to \bR\), where \(\cA = \prod \idxin{i}{\cI} \cA\I\) is called the joint action set.
+Note that this utility function depends on the actions of all the agents.
+As mentioned earlier, decision making is the rational process of finding an optimal action given the information available.
+There is no obvious way to extend that definition to the multiagent setting.
+Preferences of different agents cannot be aggregated; therefore, the notion of optimality for the set of agents is ill defined.
+
+Optimality for an individual agent is still well defined.
+Denote the opponents of agent~\(i\) by \(-i = \cI \setminus \set{i}\).
+For fixed actions of its opponents, agent~\(i\) faces a decision-making problem.
+The actions in \(\cA\I\) that are optimal for the fixed actions of \(-i\) are called best responses.
+For \(a\mI = \tuple{\sseqcom{a}{\ag}{1}{2}{i-1},\seqcom{a}{\ag}{i+1}{\card{\cI}}}\), the best-response set of agent \(i\) is~\(\br\I \of {a\mI} = \argmax\idxin{a\I}{\cA\I} u\I \of {a\I, a\mI}\).
+Note that \(\br\I \from \cA\mI \tto \cA\I\) is a correspondence and not a function.
+
+A joint action that is simultaneously a best response for all the agents is a good candidate to replace optimality in the multiagent setting.
+This concept, at the core of game theory, is called a Nash equilibrium.
+A joint action \(a\opt\) in \(\cA\) is a Nash equilibrium if
+\begin{equation}
+\label{eq:nash_equilibrium}
+\forall i \in \cI \comma a\opt\I \in \br\I \of {a\opt\mI}.
+\end{equation}
+The definitions of best response and Nash equilibrium extend readily to mixed actions by replacing \(a\)s by \(\alpha\)s.
+Note that a deterministic action is sometimes called a pure action.
+Nash proved that any game with a finite number of players having a finite number of actions has at least one, potentially mixed, Nash equilibrium~\cite{nash:1951}.
+
+\subsection{A Game Example}
+Game-theoretic concepts are illustrated on the the following game known as battle of the sexes.
+A couple, composed of a man \(\rlM\) and a woman \(\rlW\), is planning a date.
+Each one chooses between two actions: going to a football match \(\rF\) or going to an opera performance \(\rO\).
+The joint action of the couple is represented by an ordered pair \(\tuple{a\ag{\rlM}, a\ag{\rlW}}\), where \(a\ag{\rlM}\) is the action chosen by the man and \(a\ag{\rlW}\) by the woman.
+For example, \(\tuple{\rF, \rO}\) denotes that he chooses football and she chooses opera.
+
+The man prefers to be with the woman rather than separated from her.
+If they are together, he prefers football \(\tuple{\rbF, \rF}\) to opera \(\tuple{\rbO, \rO}\).
+If they are not together, he is indifferent between football \(\tuple{\rbF, \rO}\) and opera \(\tuple{\rbO, \rF}\).
+The woman prefers to be with the man rather than separated from him.
+If they are together, she prefers opera \(\tuple{\rO, \rbO}\) to football \(\tuple{\rF, \rbF}\).
+If they are not together, she still prefers opera \(\tuple{\rF, \rbO}\) to football \(\tuple{\rO, \rbF}\).
+Their preferences can be implemented by utility functions \(u\ag{\rlM}\) for the man and \(u\ag{\rlW}\) for the woman with the following values:
+\begin{equation}
+\begin{aligned}
+u\ag{\rlM} \of {\rF, \rF}  &= 2, & u\ag{\rlM} \of {\rO, \rO}  &= 1, & u\ag{\rlM} \of {\rF, \rO}  &= 0, & u\ag{\rlM} \of {\rO, \rF}  &= 0, \\
+u\ag{\rlW} \of {\rO, \rO}  &= 3, & u\ag{\rlW} \of {\rF, \rF}  &= 2, & u\ag{\rlW} \of {\rF, \rO}  &= 1, & u\ag{\rlW} \of {\rO, \rF}  &= 0.
+\end{aligned}
+\end{equation}
+
+The action sets and the utility functions of battle of the sexes are represented in a compact form as follows:
+\begin{equation}
+\label{eq:bos_normal_form}
+\punctuategame{
+\begin{game}{2}{2}
+        \> \(\rF\) \> \(\rO\)  \\
+\(\rF\) \> 2, 2    \> 0, 1 \\
+\(\rO\) \> 0, 0    \> 1, 3
+\end{game}}
+{.}\bigskip
+\end{equation}
+The man's action determines the row and the woman's determines the column.
+Numbers in the cell are the utilities received: the first by the man and the second by the woman.
+This is called the normal-form representation of the game.
+
+To compute the best response of the man, fix the action \(\alpha\ag{\rlW}\) of the woman.
+With~\(\alpha\ag{\rlW}\), she chooses \(\rF\) with probability \(p\ag{\rlW}\) and \(\rO\) with probability \(\onem{p\ag{\rlW}}\).
+Note that she chooses a pure action for \(p\ag{\rlW}=0\) or \(p\ag{\rlW}=1\).
+The utility received by the man, if he plays \(\rF\), is~\(u\ag{\rlM} \of {\rF, \alpha\ag{\rlW}} = p\ag{\rlW} u\ag{\rlM} \of {\rF, \rF} + \onem{p\ag{\rlW}} u\ag{\rlM} \of {\rF, \rO} = 2p\ag{\rlW}\).
+If he plays \(\rO\), his utility is \(u\ag{\rlM} \of {\rO, \alpha\ag{\rlW}} = p\ag{\rlW} u\ag{\rlM} \of {\rO, \rF} + \onem{p\ag{\rlW}} u\ag{\rlM} \of {\rO, \rO} = 1 - p\ag{\rlW}\).
+His optimal action depends on \(p\ag{\rlW}\) with a critical value of \(\frac{1}{3}\).
+If~\(p\ag{\rlW} > \frac{1}{3}\), he prefers \(\rF\) to \(\rO\).
+If~\(p\ag{\rlW} < \frac{1}{3}\), he prefers \(\rO\) to \(\rF\).
+If~\(p\ag{\rlW} = \frac{1}{3}\), he is indifferent between \(\rF\) and \(\rO\); any combination of \(\rF\) and \(\rO\) is a best response.
+
+
+The best response of the woman is computed in a similar fashion.
+The critical value of \(p\ag{\rlM}\) making her indifferent is \(\frac{3}{4}\).
+
+The best responses are plotted in~\cref{fig:bos_best_response}.
+The intersections of the graphs correspond to the Nash equilibria of the game.
+Battle of the sexes has three Nash equilibria: two pure ones and one mixed.
+The pure Nash equilibria arise from the man and the woman choosing the same event.
+The mixed one corresponds to the man and the woman independently randomizing their choices with probabilities \(p\ag{\rlM} = \frac{3}{4}\) and \(p\ag{\rlW} = \frac{1}{3}\).
+
+\begin{figure}[!ht]
+\caption[Best responses and Nash equilibria for battle of the sexes.]{
+Best responses and Nash equilibria for battle of the sexes.
+The man plays~\(\rF\) with probability~\(p\ag{\rlM}\).
+The woman plays~\(\rF\) with probability~\(p\ag{\rlW}\).
+The solid line is the man's best response.
+The dashed line is the woman's best response.
+The filled circles indicate the Nash equilibria.
+}
+\label{fig:bos_best_response}
+\centering
+\begin{tikzpicture}
+\input{origin_and_history_of_the_problem/game_theory_best_response.tikz}
+\end{tikzpicture}
+\end{figure}
+
+\subsection{Are Nash Equilibria the Solution?}
+\label{sec:are_nash_equilibria_the_solution}
+Nash equilibria form a solution concept for multiagent decision problems.
+Nash equilibria are self-enforcing agreements; if you give actions forming a Nash equilibrium to some agents, none of them has an incentive to unilaterally deviate.
+This self-enforcing property makes Nash equilibria relevant for decentralized control.
+Nash equilibria cannot, however, be called \textbf{the} solution to multiagent decision problems.
+They have weaknesses made clear by the following questions:
+\begin{itemize}
+\item When a game has multiple equilibria, how do agents coordinate to choose one equilibrium?
+\item Different utility functions can represent the same preferences.
+However, changing the utility functions changes the probabilities in a mixed Nash equilibrium.
+Therefore, what is the intrinsic meaning of a mixed Nash equilibrium?
+\item The social welfare is the sum of the utilities of the agents.
+Should the social welfare be maximized instead of finding an equilibrium?
+\item A Nash equilibrium guarantees no profitable unilateral deviation.
+What happens when two agents deviate simultaneously?
+\end{itemize}
+Authors have been debating for decades regarding which equilibrium is the right solution concept.
+This debate is not relevant for the proposed research.
+Any solution concept can be used as long as its limitations are understood.
+
+\subsection{Correlated Equilibria}
+\label{sec:correlated_equilibria}
+The mixed Nash equilibrium in battle of the sexes seems fairer than the two pure ones: each agent has a chance to go on his or her preferred date.
+However, the two agents end up in different locations with positive probability: some utility is wasted.
+In the mixed Nash equilibrium, the expected utility for the man is \(\frac{2}{3}\) and for the woman \(\frac{3}{2}\).
+
+When facing these kinds of incompatible decisions, humans sometimes have recourse to a coin toss.
+The agents agree that on heads they go to the football match and on tails they go to the opera performance.
+This is not a Nash equilibrium.
+However, once the outcome of the coin toss is known, no agent has an incentive to unilaterally deviate.
+This is another form of equilibrium, introduced by Aumann under the name correlated equilibrium~\cite{aumann:1987}.
+The correlated equilibrium maintains the fairness of the mixed Nash equilibrium but does not waste utility.
+In the correlated equilibrium, the expected utility for the man is \(\frac{3}{2}\) and for the woman \(\frac{5}{2}\).
+Note that every Nash equilibrium is a correlated equilibrium but the converse is not true.
+
+Two equivalent definitions of a correlated equilibrium exist.
+The first one describes the equilibrium in terms of the common random source and the actions taken given each possible outcome; the second one, in terms of the resulting distribution over joint actions.
+The first definition is more intuitive whereas the second one is easier to work with.
+As a result, we give the second definition.
+A probability distribution over joint actions \(\gamma\) is a correlated equilibrium if
+\begin{equation}
+\label{eq:correlated_equilibrium}
+\forall i \in \cI \comma a\I, a'\I \in\cA\I \comma \sum\idxin{a\mI}{\cA\mI} \gamma\elmt{a} \grpparen{u\I \of {a} - u\I \of {a'\I, a\mI}} \geq 0.
+\end{equation}

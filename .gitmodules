@@ -1,0 +1,18 @@
+[submodule "paper/texmf/bibtex/bib/bibtex_ddb"]
+	path = paper/texmf/bibtex/bib/bibtex_ddb
+	url = git://github.com/dudebout/bibtex_ddb
+[submodule "paper/texmf/tex/latex/latex_ddbbib"]
+	path = paper/texmf/tex/latex/latex_ddbbib
+	url = git://github.com/dudebout/latex_ddbbib
+[submodule "paper/texmf/tex/latex/latex_ddbgame"]
+	path = paper/texmf/tex/latex/latex_ddbgame
+	url = git://github.com/dudebout/latex_ddbgame
+[submodule "paper/texmf/tex/latex/latex_ddbref"]
+	path = paper/texmf/tex/latex/latex_ddbref
+	url = git://github.com/dudebout/latex_ddbref
+[submodule "paper/texmf/tex/latex/latex_ddbsymb"]
+	path = paper/texmf/tex/latex/latex_ddbsymb
+	url = git://github.com/dudebout/latex_ddbsymb
+[submodule "paper/texmf/tex/latex/latex_ddbthm"]
+	path = paper/texmf/tex/latex/latex_ddbthm
+	url = git://github.com/dudebout/latex_ddbthm

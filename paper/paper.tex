@@ -1,0 +1,115 @@
+\documentclass[12pt,toc=bib,twoside,paper=letter,pagesize]{scrbook}
+
+
+% KOMA-Script integration with other packages
+\usepackage{scrhack}
+
+
+% General options
+\usepackage[utf8]{inputenc}
+\usepackage{fixltx2e}
+\usepackage{microtype}
+
+
+% Symbols
+\usepackage{symb}
+
+
+% Normal-form games styling
+\usepackage{ddbgame}
+
+
+% Counters not reset every chapter
+\usepackage{chngcntr}
+\counterwithout{equation}{chapter}
+\counterwithout{figure}{chapter}
+
+
+% Theorems styled like the section headings
+\usepackage{ddbthmsty}
+\theoremstyle{ddbsans}
+\usepackage{ddbthmdef}
+
+
+% Floats
+\usepackage[justification=justified,labelfont={sf,bf,up},labelsep=period,font=small]{caption}
+\captionsetup[figure]{position=bottom,singlelinecheck=false}
+\usepackage[font=small]{subcaption}
+\usepackage{float}
+\floatstyle{komabelow}
+\restylefloat{figure}
+
+
+% Figures
+\usepackage{tikz}
+\tikzset{font=\small}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.7}
+\pgfplotsset{every axis plot/.append style={line width=0.8pt}} %thick
+
+
+% Hyperlinks setup
+\usepackage{ddbhref}
+
+
+% References
+\usepackage[noabbrev]{ddbcref}
+
+
+% Acronyms
+\usepackage{acrn}
+
+
+% Citations
+\usepackage{cite}
+
+
+% Document information
+\title{Empirical-evidence Equilibria in Stochastic Games}
+\author{Nicolas Dudebout}
+\date{October 2012}
+
+
+\begin{document}
+
+
+\frontmatter
+\maketitle
+\tableofcontents
+\chapter*{Nomenclature}
+\addcontentsline{toc}{chapter}{Nomenclature}
+\input{nomenclature}
+
+
+\mainmatter
+\chapter{Introduction}
+\input{introduction}
+
+\chapter{Origin and History of the Problem}
+\label{sec:origin_and_history_of_the_problem}
+\section{Decentralized Control through Learning in Stochastic Games}
+\input{origin_and_history_of_the_problem/decentralized_control_through_learning_in_stochastic_games}
+\section{Decision Making}
+\input{origin_and_history_of_the_problem/decision_making}
+\section{Game Theory}
+\input{origin_and_history_of_the_problem/game_theory}
+\section{Learning in Games}
+\input{origin_and_history_of_the_problem/learning_in_games}
+\section{Stochastic Games}
+\input{origin_and_history_of_the_problem/stochastic_games}
+\section{Bounded Rationality}
+\input{origin_and_history_of_the_problem/bounded_rationality}
+
+\chapter{Preliminary Research}
+\input{preliminary_research}
+
+\chapter{Proposed Research}
+\input{proposed_research}
+
+
+\backmatter
+\bibliographystyle{IEEEtran}
+\bibliography{ddb,ddbxref}
+
+
+\end{document}
