@@ -16,3 +16,12 @@
 [submodule "paper/texmf/tex/latex/latex_ddbthm"]
 	path = paper/texmf/tex/latex/latex_ddbthm
 	url = git://github.com/dudebout/latex_ddbthm
+[submodule "presentation/texmf/tex/latex/latex_ddbsymb"]
+	path = presentation/texmf/tex/latex/latex_ddbsymb
+	url = git://github.com/dudebout/latex_ddbsymb
+[submodule "presentation/texmf/tex/latex/latex_ddbgame"]
+	path = presentation/texmf/tex/latex/latex_ddbgame
+	url = git://github.com/dudebout/latex_ddbgame
+[submodule "presentation/texmf/tex/latex/latex_ddbbeamer"]
+	path = presentation/texmf/tex/latex/latex_ddbbeamer
+	url = git://github.com/dudebout/latex_ddbbeamer
