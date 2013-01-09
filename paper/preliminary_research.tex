@@ -249,7 +249,7 @@ The pair \(\sigmamu\) is an \(m\) \ac{eee} if the following two conditions hold 
 \end{enumerate}
 The pair \(\sigmamu\) is an \(\epsilonm\) \ac{eee} if the following two conditions hold for all \(i\) in \(\cI\):
 \begin{enumerate}
-\item Strategy \(\sigma\I\) is a \(\muImI\) optimal.
+\item Strategy \(\sigma\I\) is \(\epsilonImuImI\) optimal.
 \item Predictor \(\mu\) is \(\sigmamI\) consistent with \(\rbN\).
 \end{enumerate}
 \end{definition}
@@ -353,7 +353,7 @@ The value function \(\Utheta\) is a fixed point of~\(\Btheta\). The Bellman oper
 \end{align*}
 
 The continuity of \(\theta \mapsto \Btheta \Uthetap\) can now be established.
-By definition, \(\parentheses{\Btheta \Uthetap} \of{x} = \max\idxin{a}{\cA} v \of{x, a, \theta}\), where \(v \of{x, a, \theta} = \onem{\delta} u \of{x, a} + \delta \tr{f \of{x, a}} \Uthetap\).
+By definition, \(\parentheses{\Btheta \Uthetap} \of{x} = \max\idxin{a}{\cA} v \of{x, a, \theta}\), where \(v \of{x, a, \theta} = \onem{\delta} u \of{x, a} + \delta f \of{x, a}\tr \Uthetap\).
 For fixed~\(x\) and~\(a\), \(\theta \mapsto v \of{x, a, \theta}\) is linear and therefore continuous.
 For a fixed~\(x\), \(\theta \mapsto \Btheta \Uthetap \of{x}\) is the maximum of a finite number of continuous functions and as such is continuous.
 The function \(\theta \mapsto \Btheta \Uthetap\) is continuous because each of its finitely many components is continuous.
